@@ -1,0 +1,182 @@
+#
+
+################################################################
+#
+# Configuration sample for Traefik v2.
+#
+# For Traefik v1: https://github.com/traefik/traefik/blob/v1.7/traefik.sample.toml
+#
+################################################################
+
+################################################################
+# Global configuration
+################################################################
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: true
+
+################################################################
+# EntryPoints configuration
+################################################################
+
+# defaultEntryPoints = ["http"]
+#
+# [entryPoints]
+#   [entryPoints.http]
+#   address = ":80"
+# EntryPoints definition
+#
+# Optional
+#
+entryPoints:
+  web:
+    address: :80
+
+  # websecure:
+  #   address: :443
+
+# http:
+#   routers:
+#     svcwhoami:
+#       # By default, routers listen to every entry points
+#       # rule: "PathPrefix(`/whoami/`)" PathPrefix
+#       # rule: "Host(`traefik.io`) || (Host(`whoami.inner`) && PathPrefix(`/svcwhoami/`)"
+#       rule: "(Host(`whoami.inner`) || PathPrefix(`/svcwhoami/`)"
+#       service: "svcwhoami"
+
+  # services:
+  #   svcwhoami:
+  #     loadBalancer:
+  #       servers:
+  #         - url: 'http://localhost:10102'
+################################################################
+# Traefik logs configuration
+################################################################
+
+# Traefik logs
+# Enabled by default and log to stdout
+#
+# Optional
+#
+log:
+  # Log level
+  #
+  # Optional
+  # Default: "ERROR"
+  #
+  level: DEBUG
+
+  # Sets the filepath for the traefik log. If not specified, stdout will be used.
+  # Intermediate directories are created if necessary.
+  #
+  # Optional
+  # Default: os.Stdout
+  #
+#  filePath: log/traefik.log
+
+  # Format is either "json" or "common".
+  #
+  # Optional
+  # Default: "common"
+  #
+#  format: json
+
+################################################################
+# Access logs configuration
+################################################################
+
+# Enable access logs
+# By default it will write to stdout and produce logs in the textual
+# Common Log Format (CLF), extended with additional fields.
+#
+# Optional
+#
+#accessLog:
+  # Sets the file path for the access log. If not specified, stdout will be used.
+  # Intermediate directories are created if necessary.
+  #
+  # Optional
+  # Default: os.Stdout
+  #
+#  filePath: /path/to/log/log.txt
+
+  # Format is either "json" or "common".
+  #
+  # Optional
+  # Default: "common"
+  #
+#  format: json
+
+################################################################
+# API and dashboard configuration
+################################################################
+
+# Enable API and dashboard
+#
+# Optional
+#
+api:
+  # Enable the API in insecure mode
+  #
+  # Optional
+  # Default: false
+  #
+  insecure: true
+
+  # Enabled Dashboard
+  #
+  # Optional
+  # Default: true
+  #
+  dashboard: true
+
+################################################################
+# Ping configuration
+################################################################
+
+# Enable ping
+#ping:
+  # Name of the related entry point
+  #
+  # Optional
+  # Default: "traefik"
+  #
+#  entryPoint: traefik
+
+################################################################
+# Docker configuration backend
+################################################################
+# sudo ./traefik --providers.consulcatalog=true --providers.consulcatalog.exposedByDefault=false --providers.consulcatalog.endpoint.address=192.168.1.237:8500 --providers.consulcatalog.endpoint.scheme=http --providers.consulcatalog.watch=true --providers.consulcatalog.prefix=traefik --api.dashboard=true --api.insecure=true --log.level=DEBUG
+providers:
+  consulCatalog:
+    prefix: traefik
+    # exposedByDefault: true
+    exposedByDefault: false
+    watch: true
+    endpoint:
+      address: 127.0.0.1:8500
+      scheme: http
+#providers:
+  # Enable Docker configuration backend
+#  docker:
+    # Docker server endpoint. Can be a tcp or a unix socket endpoint.
+    #
+    # Required
+    # Default: "unix:///var/run/docker.sock"
+    #
+#    endpoint: tcp://10.10.10.10:2375
+
+    # Default host rule.
+    #
+    # Optional
+    # Default: "Host(`{{ normalize .Name }}`)"
+    #
+#    defaultRule: Host(`{{ normalize .Name }}.docker.localhost`)
+
+    # Expose containers by default in traefik
+    #
+    # Optional
+    # Default: true
+    #
+#    exposedByDefault: false
+
