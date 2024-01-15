@@ -1,0 +1,12 @@
+http:
+  routers:
+    routerstatichello:
+      # By default, routers listen to every entry points
+      rule: "PathPrefix(`/staticapi/`)"
+      service: "svctatichello"
+
+  services:
+    svctatichello:
+      loadBalancer:
+        servers:
+          - url: 'http://192.168.2.61:10200'
