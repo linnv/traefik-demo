@@ -142,7 +142,8 @@ providers:
       address: 127.0.0.1:8500
       scheme: http
   file:
-    directory: /home/jialinwu/traefik-demo/fileprovider
+    # directory: /home/jialinwu/traefik-demo/fileprovider
+    directory: /etc/traefik/fileprovider
     watch: true
 #providers:
   # Enable Docker configuration backend
