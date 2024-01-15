@@ -34,21 +34,6 @@ entryPoints:
 
   # websecure:
   #   address: :443
-
-# http:
-#   routers:
-#     svcwhoami:
-#       # By default, routers listen to every entry points
-#       # rule: "PathPrefix(`/whoami/`)" PathPrefix
-#       # rule: "Host(`traefik.io`) || (Host(`whoami.inner`) && PathPrefix(`/svcwhoami/`)"
-#       rule: "(Host(`whoami.inner`) || PathPrefix(`/svcwhoami/`)"
-#       service: "svcwhoami"
-
-  # services:
-  #   svcwhoami:
-  #     loadBalancer:
-  #       servers:
-  #         - url: 'http://localhost:10102'
 ################################################################
 # Traefik logs configuration
 ################################################################
@@ -156,6 +141,9 @@ providers:
     endpoint:
       address: 127.0.0.1:8500
       scheme: http
+  file:
+    directory: /home/jialinwu/traefik-demo/fileprovider
+    watch: true
 #providers:
   # Enable Docker configuration backend
 #  docker:
