@@ -17,7 +17,7 @@ import (
 	consul "github.com/hashicorp/consul/api"
 )
 
-//Client provides an interface for getting data out of Consul
+// Client provides an interface for getting data out of Consul
 type Client interface {
 	// Get a Service from consul
 	Service(string, string) ([]string, error)
@@ -31,7 +31,7 @@ type client struct {
 	consul *consul.Client
 }
 
-//NewConsul returns a Client interface for given consul address
+// NewConsul returns a Client interface for given consul address
 func NewConsulClient(addr string) (*client, error) {
 	config := consul.DefaultConfig()
 	config.Address = addr
@@ -59,7 +59,7 @@ func (c *client) Register(id, name, host string, port int, path, health string) 
 			HTTP:          health,
 			TLSSkipVerify: true,
 			Method:        "GET",
-			Interval:      "10s",
+			Interval:      "30s",
 			Timeout:       "1s",
 		},
 		// // Tags: []string{"traefik.enable=true", "traefik.http.routers.myService.rule=Path(`/myservice`)"},
@@ -75,6 +75,7 @@ func (c *client) Register(id, name, host string, port int, path, health string) 
 			// "traefik.http.routers." + name + "1.rule=PathPrefix(`/svcwhoami/`)",
 			// "traefik.http.routers." + name + ".rule=PathPrefix(`/sdm/monkey/`)",
 			"traefik.http.routers." + name + "1.rule=PathPrefix(`/sdm/monkey/`)",
+			"traefik.http.routers." + name + "1.entryPoints=web",
 
 			// 	// // "traefik.backend=" + name,
 			// 	// "traefik.backend=" + "whoami",
@@ -112,7 +113,8 @@ func (c *client) Service(service, tag string) ([]*consul.ServiceEntry, *consul.Q
 }
 
 func main() {
-	consul := flag.String("consul", "localhost:8500", "Consul host")
+	// consul := flag.String("consul", "localhost:8500", "Consul host")
+	consul := flag.String("consul", "192.168.1.237:8500", "Consul host")
 	port := flag.Int("port", 10101, "this service port")
 	flag.Parse()
 
@@ -145,8 +147,9 @@ func main() {
 	}
 
 	// Register Service
-	// hostname = "192.168.1.237"
-	hostname = "192.168.1.237"
+	// hostname = "192.168.1.238"
+	// hostname = "192.168.2.61" not work
+	hostname = "192.168.3.113"
 	// hostname = fmt.Sprintf("%s:%d", hostname, *port)
 	id := fmt.Sprintf("greeting-%v-%v", hostname, *port)
 	// consulClient, _ := NewConsulClient(*consul)
@@ -205,8 +208,8 @@ func main() {
 	go func() {
 		for sig := range c {
 			log.Println("Shutting Down...", sig)
-			// consulClient.DeRegister(id)
-			consulClient.DeRegister(hostname)
+			consulClient.DeRegister(id)
+			// consulClient.DeRegister(hostname)
 			log.Println("Done...Bye")
 			os.Exit(0)
 		}
