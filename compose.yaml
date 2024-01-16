@@ -34,7 +34,10 @@ services:
       - --log.level=DEBUG
     ports:
       - "80:80"
+      - "443:443"
       - "8080:8080"
+      - "8886:8886"
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml
       - ./fileprovider/:/etc/traefik/fileprovider/
+      - ./tlsfils/:/tlsfils/

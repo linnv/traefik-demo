@@ -3,10 +3,33 @@ http:
     routerstatichello:
       # By default, routers listen to every entry points
       rule: "PathPrefix(`/staticapi/`)"
-      service: "svctatichello"
+      entryPoints:
+        # - web2
+        - web
+        - websecure
+      service: svctatichello
+      tls:
+        certResolver: default
+
+    routerhttps:
+      rule: "Host(`webrtc.devinner`)"
+      entryPoints:
+        - websecure
+      service: webrtc-service
+      tls:
+        certResolver: default
 
   services:
     svctatichello:
       loadBalancer:
         servers:
           - url: 'http://192.168.2.61:10200'
+          - url: 'http://192.168.2.61:10202'
+    webrtc-service:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.2.61:8013"
+tls:
+  certificates:
+    - certFile: /tlsfils/webrtc.devinner.crt
+      keyFile: /tlsfils/webrtc.devinner.key

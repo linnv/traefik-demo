@@ -31,9 +31,16 @@ global:
 entryPoints:
   web:
     address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  web2:
+    address: :8886
+  websecure:
+    address: :443
 
-  # websecure:
-  #   address: :443
 ################################################################
 # Traefik logs configuration
 ################################################################
