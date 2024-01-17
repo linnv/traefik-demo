@@ -98,7 +98,7 @@ log:
 #  format: json
 accessLog:
     filePath: /var/log/traefik/traefik-access.log 
-    Default: "common"
+    format: "common"
     fields:
         names:
             StartUTC: drop

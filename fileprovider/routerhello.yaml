@@ -1,18 +1,29 @@
 http:
   routers:
     routerhttps:
-      rule: "Host(`jialinwu.com`)"
+      rule: "Host(`jialinwu.com`)||Host(`www.jialinwu.com`)"
       entryPoints:
         - websecure
       service: jialinwu-service
       tls:
         certResolver: jialinwuresolver
+    wwwrouterhttps:
+      rule: "Host(`www.jialinwu.com`)"
+      middlewares:
+        - redirect-www-to-nonwww
+      service: jialinwu-service
+  middlewares:
+    redirect-www-to-nonwww:
+      redirectRegex:
+        regex: "^https?://www.jialiinwu.com/(.*)"
+        replacement: "https://jialinwu.com/$${1}"
+        permanent: true
 
   services:
     jialinwu-service:
       loadBalancer:
         servers:
-          - url: "http://127.0.0.1:8801"
+          - url: "http://172.17.0.1:8801"
         healthCheck:
           path: /health
           interval: "10s"
