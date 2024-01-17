@@ -1,34 +1,34 @@
 version: '3.8'
 services:
-  consul:
-    image: consul:1.15.4
-    command: consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0 -data-dir /consuldir
-    ports:
-      - "8400:8400"
-      - "8500:8500"
-      - "8600:53/udp"
-    expose:
-      - "8300"
-      - "8301"
-      - "8301/udp"
-      - "8302"
-      - "8302/udp"
-    volumes:
-      - ./consuldir:/consuldir
-
-  whoami1:
-    image: traefik/whoami
+  # consul:
+  #   image: consul:1.15.4
+  #   command: consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0 -data-dir /consuldir
+  #   ports:
+  #     - "8400:8400"
+  #     - "8500:8500"
+  #     - "8600:53/udp"
+  #   expose:
+  #     - "8300"
+  #     - "8301"
+  #     - "8301/udp"
+  #     - "8302"
+  #     - "8302/udp"
+  #   volumes:
+  #     - ./consuldir:/consuldir
+  #
+  # whoami1:
+  #   image: traefik/whoami
 
   traefik:
     image:  traefik:v2.10.7
     command: 
       - --entrypoints.web.address=:80
-      - --providers.consulcatalog=true
-      - --providers.consulcatalog.exposedByDefault=false
-      - --providers.consulcatalog.endpoints.address=consul:8500 
-      - --providers.consulcatalog.endpoint.scheme=http
-      - --providers.consulcatalog.watch=true
-      - --providers.consulcatalog.prefix=traefik
+      # - --providers.consulcatalog=true
+      # - --providers.consulcatalog.exposedByDefault=false
+      # - --providers.consulcatalog.endpoints.address=consul:8500 
+      # - --providers.consulcatalog.endpoint.scheme=http
+      # - --providers.consulcatalog.watch=true
+      # - --providers.consulcatalog.prefix=traefik
       - --api.dashboard=true
       - --api.insecure=true
       - --log.level=DEBUG
@@ -41,3 +41,6 @@ services:
       - ./traefik.yml:/etc/traefik/traefik.yml
       - ./fileprovider/:/etc/traefik/fileprovider/
       - ./tlsfils/:/tlsfils/
+      - ./logs/:/var/log/traefik/
+      - ./letsencrypt/:/letsencrypt/
+    restart: always

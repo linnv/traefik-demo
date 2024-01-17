@@ -1,35 +1,27 @@
 http:
   routers:
-    routerstatichello:
-      # By default, routers listen to every entry points
-      rule: "PathPrefix(`/staticapi/`)"
-      entryPoints:
-        # - web2
-        - web
-        - websecure
-      service: svctatichello
-      tls:
-        certResolver: default
-
     routerhttps:
-      rule: "Host(`webrtc.devinner`)"
+      rule: "Host(`jialinwu.com`)"
       entryPoints:
         - websecure
-      service: webrtc-service
+      service: jialinwu-service
       tls:
-        certResolver: default
+        certResolver: jialinwuresolver
 
   services:
-    svctatichello:
+    jialinwu-service:
       loadBalancer:
         servers:
-          - url: 'http://192.168.2.61:10200'
-          - url: 'http://192.168.2.61:10202'
-    webrtc-service:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.2.61:8013"
-tls:
-  certificates:
-    - certFile: /tlsfils/webrtc.devinner.crt
-      keyFile: /tlsfils/webrtc.devinner.key
+          - url: "http://127.0.0.1:8801"
+        healthCheck:
+          path: /health
+          interval: "10s"
+          timeout: "3s"
+
+certificatesResolvers:
+  jialinwuresolver:
+    acme:
+      email: win27v@gmail.com
+      storage: /letsencrypt/acme.json
+      httpChallenge:
+        entryPoint: web

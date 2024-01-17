@@ -36,8 +36,6 @@ entryPoints:
         entryPoint:
           to: websecure
           scheme: https
-  web2:
-    address: :8886
   websecure:
     address: :443
 
@@ -98,7 +96,12 @@ log:
   # Default: "common"
   #
 #  format: json
-
+accessLog:
+    filePath: /var/log/traefik/traefik-access.log 
+    Default: "common"
+    fields:
+        names:
+            StartUTC: drop
 ################################################################
 # API and dashboard configuration
 ################################################################
@@ -140,14 +143,14 @@ api:
 ################################################################
 # sudo ./traefik --providers.consulcatalog=true --providers.consulcatalog.exposedByDefault=false --providers.consulcatalog.endpoint.address=192.168.1.237:8500 --providers.consulcatalog.endpoint.scheme=http --providers.consulcatalog.watch=true --providers.consulcatalog.prefix=traefik --api.dashboard=true --api.insecure=true --log.level=DEBUG
 providers:
-  consulCatalog:
-    prefix: traefik
-    # exposedByDefault: true
-    exposedByDefault: false
-    watch: true
-    endpoint:
-      address: 127.0.0.1:8500
-      scheme: http
+  # consulCatalog:
+  #   prefix: traefik
+  #   # exposedByDefault: true
+  #   exposedByDefault: false
+  #   watch: true
+  #   endpoint:
+  #     address: 127.0.0.1:8500
+  #     scheme: http
   file:
     # directory: /home/jialinwu/traefik-demo/fileprovider
     directory: /etc/traefik/fileprovider
